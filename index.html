@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Logger</title>
+</head>
+<body>
+    <h1>Click the Image Below</h1>
+    <img src="https://via.placeholder.com/300" alt="Click Me" style="cursor: pointer;" onclick="sendData()">
+    
+    <script>
+        function sendData() {
+            // In a real scenario, you would gather data here
+            const data = {
+                message: "User clicked the image!",
+                userAgent: navigator.userAgent
+            };
+
+            // Send data to your Vercel API endpoint
+            fetch('/api/log', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+        }
+    </script>
+</body>
+</html>
